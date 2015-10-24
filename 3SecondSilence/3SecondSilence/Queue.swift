@@ -12,20 +12,15 @@ protocol QueueDelegate {
     func alertReady(alert: Alert)
 }
 
-internal class Queue {
-    var delegate: QueueDelegate? = AlertPresenterController()
+class Queue {
+    var delegate: QueueDelegate?
     
     func addToQueue(alert: Alert) {
-        countDown(alert.time) { _ in
+        let counter = Counter()
+        counter.countDown(alert.time) { _ in
             if let del = self.delegate {
                 del.alertReady(alert)
             }
-        }
-    }
-    
-    private func countDown(time: NSTimeInterval, completion: () -> Void) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { _ in
-            completion()
         }
     }
 }
@@ -43,3 +38,12 @@ internal struct Alert {
         self.buttons = buttons
     }
 }
+
+struct Counter {
+    func countDown(time: NSTimeInterval, completion: () -> Void) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { _ in
+            completion()
+        }
+    }
+}
+

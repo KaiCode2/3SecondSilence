@@ -8,15 +8,15 @@
 
 import UIKit
 
-protocol AlertPresenterControllerDelegate {
+protocol AlertPresenterControllerDelegate: class {
     func presentAlert(alert: Alert)
     func isAlertVisible() -> Bool
 }
 
 
-struct AlertPresenterController: QueueDelegate, ViewControllerDelegate {
+class AlertPresenterController: QueueDelegate, ViewControllerDelegate {
     private var queue: [Alert]?
-    var delegate: AlertPresenterControllerDelegate? = ViewController()
+    weak var delegate: AlertPresenterControllerDelegate?
     
     func alertReady(alert: Alert) {
         guard (delegate != nil) else {
@@ -27,9 +27,9 @@ struct AlertPresenterController: QueueDelegate, ViewControllerDelegate {
             delegate?.presentAlert(alert)
         } else {
             if queue == nil {
-//                queue = [alert]
+                queue = [alert]
             } else {
-//                queue?.append(alert)
+                queue?.append(alert)
             }
         }
     }
@@ -41,6 +41,8 @@ struct AlertPresenterController: QueueDelegate, ViewControllerDelegate {
             return
         } else {
             delegate?.presentAlert(queue!.first!)
+            queue!.removeFirst()
         }
     }
 }
+
