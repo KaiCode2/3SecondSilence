@@ -29,7 +29,7 @@ class ViewController: UIViewController, AlertPresenterControllerDelegate {
     }
     
     @IBAction private func buttonTapped(sender: AnyObject) {
-        let alert = Alert(title: "Alert \(count)", message: "message", buttons: ["OK"])
+        let alert = Alert(title: "Alert \(count)", message: "message", buttons: ["OK", "Cool"])
         count++
         if queue == nil {
             queue = Queue()
@@ -39,10 +39,26 @@ class ViewController: UIViewController, AlertPresenterControllerDelegate {
     
     func presentAlert(alert: Alert) {
         let alertCon = UIAlertController(title: alert.title, message: alert.message, preferredStyle: .Alert)
-        alertCon.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { _ in
-            self.delegate?.alertDismissed()
-            self.alertVisible = false
-        }))
+        if let buttons = alert.buttons {
+            for (index, title) in buttons.enumerate() {
+                if index == 0 {
+                    alertCon.addAction(UIAlertAction(title: title, style: .Cancel, handler: { _ in
+                        self.delegate?.alertDismissed()
+                        self.alertVisible = false
+                    }))
+                } else {
+                    alertCon.addAction(UIAlertAction(title: title, style: .Default, handler: { _ in
+                        self.delegate?.alertDismissed()
+                        self.alertVisible = false
+                    }))
+                }
+            }
+        } else {
+            alertCon.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { _ in
+                self.delegate?.alertDismissed()
+                self.alertVisible = false
+            }))
+        }
         alertVisible = true
         presentViewController(alertCon, animated: true, completion: nil)
     }
