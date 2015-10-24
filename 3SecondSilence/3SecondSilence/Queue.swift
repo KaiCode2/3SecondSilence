@@ -13,14 +13,16 @@ protocol QueueDelegate {
 }
 
 class Queue {
-    var delegate: QueueDelegate?
+    private var delegate: QueueDelegate
+    
+    init(delegate: QueueDelegate) {
+        self.delegate = delegate
+    }
     
     func addToQueue(alert: Alert) {
         let counter = Counter()
         counter.countDown(alert.time) { _ in
-            if let del = self.delegate {
-                del.shouldShowAlert(alert)
-            }
+            self.delegate.shouldShowAlert(alert)
         }
     }
 }

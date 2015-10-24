@@ -24,16 +24,12 @@ class ViewController: UIViewController, AlertPresenterControllerDelegate {
         super.viewDidLoad()
         controller = AlertPresenterController(delegate: self)
         delegate = controller
-        queue = Queue()
-        queue?.delegate = controller
+        queue = Queue(delegate: controller!)
     }
     
     @IBAction private func buttonTapped(sender: AnyObject) {
         let alert = Alert(title: "Alert \(count)", message: "message", buttons: ["OK", "Cool"])
         count++
-        if queue == nil {
-            queue = Queue()
-        }
         queue?.addToQueue(alert)
     }
     
