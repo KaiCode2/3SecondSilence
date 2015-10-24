@@ -9,22 +9,22 @@
 import UIKit
 
 protocol AlertPresenterControllerDelegate: class {
-    func presentAlert(alert: Alert)
+    func shouldPresentAlert(alert: Alert)
     func isAlertVisible() -> Bool
 }
 
 
 class AlertPresenterController: QueueDelegate, ViewControllerDelegate {
     private var queue: [Alert]?
-    weak var delegate: AlertPresenterControllerDelegate?
+    private weak var delegate: AlertPresenterControllerDelegate?
     
-    func alertReady(alert: Alert) {
-        guard (delegate != nil) else {
-            fatalError("Delegate not implemented")
-        }
-        
+    init(delegate: AlertPresenterControllerDelegate) {
+        self.delegate = delegate
+    }
+    
+    func shouldShowAlert(alert: Alert) {
         if delegate?.isAlertVisible() == false {
-            delegate?.presentAlert(alert)
+            delegate?.shouldPresentAlert(alert)
         } else {
             if queue == nil {
                 queue = [alert]
@@ -34,14 +34,17 @@ class AlertPresenterController: QueueDelegate, ViewControllerDelegate {
         }
     }
     
-    func alertDismissed() {
+    func didDismissAlert(sender: UIViewController, alert: UIAlertController) {
         if queue == nil {
             return
         } else if queue!.isEmpty {
             return
         } else {
-            delegate?.presentAlert(queue!.first!)
-            queue!.removeFirst()
+            guard queue?.first != nil else {
+                return
+            }
+            delegate?.shouldPresentAlert(queue!.first!)
+            queue?.removeFirst()
         }
     }
 }

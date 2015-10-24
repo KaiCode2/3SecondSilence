@@ -9,7 +9,7 @@
 import UIKit
 
 protocol QueueDelegate {
-    func alertReady(alert: Alert)
+    func shouldShowAlert(alert: Alert)
 }
 
 class Queue {
@@ -19,7 +19,7 @@ class Queue {
         let counter = Counter()
         counter.countDown(alert.time) { _ in
             if let del = self.delegate {
-                del.alertReady(alert)
+                del.shouldShowAlert(alert)
             }
         }
     }
