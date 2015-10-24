@@ -12,19 +12,17 @@ protocol ViewControllerDelegate {
     func didDismissAlert(sender: UIViewController, alert: UIAlertController)
 }
 
-class ViewController: UIViewController, AlertPresenterControllerDelegate {
+class ViewController: UIViewController, QueueDelegate {
     
     private var queue: Queue?
-    private var controller: AlertPresenterController?
     private var count = 1
     private var alertVisible: Bool = false
     var delegate: ViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        controller = AlertPresenterController(delegate: self)
-        delegate = controller
-        queue = Queue(delegate: controller!)
+        delegate = queue
+        queue = Queue(delegate: self)
     }
     
     @IBAction private func buttonTapped(sender: AnyObject) {
@@ -33,7 +31,11 @@ class ViewController: UIViewController, AlertPresenterControllerDelegate {
         queue?.addToQueue(alert)
     }
     
-    func shouldPresentAlert(alert: Alert) {
+    func isAlertVisible() -> Bool {
+        return alertVisible
+    }
+    
+    func shouldShowAlert(alert: Alert) {
         let alertCon = UIAlertController(title: alert.title, message: alert.message, preferredStyle: .Alert)
         if let buttons = alert.buttons {
             for (index, title) in buttons.enumerate() {
@@ -50,10 +52,6 @@ class ViewController: UIViewController, AlertPresenterControllerDelegate {
         }
         alertVisible = true
         presentViewController(alertCon, animated: true, completion: nil)
-    }
-    
-    func isAlertVisible() -> Bool {
-        return alertVisible
     }
 }
 

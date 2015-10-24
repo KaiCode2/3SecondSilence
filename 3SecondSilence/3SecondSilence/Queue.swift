@@ -10,24 +10,49 @@ import UIKit
 
 protocol QueueDelegate {
     func shouldShowAlert(alert: Alert)
+    func isAlertVisible() -> Bool
 }
 
-class Queue {
+class Queue: ViewControllerDelegate {
     private var delegate: QueueDelegate
+    let operationQueue = NSOperationQueue()
     
     init(delegate: QueueDelegate) {
         self.delegate = delegate
     }
     
     func addToQueue(alert: Alert) {
+        let countingOperation = CountingOperation(time: alert.time) { _ in
+            if self.delegate.isAlertVisible() {
+            }
+        }
+        
+        operationQueue.addOperations([countingOperation], waitUntilFinished: true)
+    }
+    
+    func didDismissAlert(sender: UIViewController, alert: UIAlertController) {
+        
+    }
+}
+
+private class CountingOperation: NSOperation {
+    private let time: NSTimeInterval
+    
+    init(time: NSTimeInterval, completion: (() -> Void)?) {
+        self.time = time
+        super.init()
+        self.completionBlock = completion
+    }
+    
+    override func start() {
         let counter = Counter()
-        counter.countDown(alert.time) { _ in
-            self.delegate.shouldShowAlert(alert)
+        counter.countDown(time) { _ in
+            self.completionBlock?()
         }
     }
 }
 
-internal struct Alert {
+struct Alert {
     var time: NSTimeInterval = 3
     
     var title: String?

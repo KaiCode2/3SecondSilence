@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ACB60FC11BDB17E0007D9DE3 /* AlertPresenterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB60FC01BDB17E0007D9DE3 /* AlertPresenterController.swift */; settings = {ASSET_TAGS = (); }; };
 		ACD3A42C1BD87D8300E22D2D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3A42B1BD87D8300E22D2D /* AppDelegate.swift */; };
 		ACD3A42E1BD87D8300E22D2D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3A42D1BD87D8300E22D2D /* ViewController.swift */; };
 		ACD3A4311BD87D8300E22D2D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACD3A42F1BD87D8300E22D2D /* Main.storyboard */; };
@@ -17,7 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		ACB60FC01BDB17E0007D9DE3 /* AlertPresenterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPresenterController.swift; sourceTree = "<group>"; };
 		ACD3A4281BD87D8300E22D2D /* 3SecondSilence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3SecondSilence.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACD3A42B1BD87D8300E22D2D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACD3A42D1BD87D8300E22D2D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,7 +58,6 @@
 			children = (
 				ACD3A42B1BD87D8300E22D2D /* AppDelegate.swift */,
 				ACD3A42D1BD87D8300E22D2D /* ViewController.swift */,
-				ACB60FC01BDB17E0007D9DE3 /* AlertPresenterController.swift */,
 				ACD3A43D1BD8802900E22D2D /* Queue.swift */,
 				ACD3A42F1BD87D8300E22D2D /* Main.storyboard */,
 				ACD3A4321BD87D8300E22D2D /* Assets.xcassets */,
@@ -141,7 +138,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACB60FC11BDB17E0007D9DE3 /* AlertPresenterController.swift in Sources */,
 				ACD3A42E1BD87D8300E22D2D /* ViewController.swift in Sources */,
 				ACD3A43E1BD8802900E22D2D /* Queue.swift in Sources */,
 				ACD3A42C1BD87D8300E22D2D /* AppDelegate.swift in Sources */,
