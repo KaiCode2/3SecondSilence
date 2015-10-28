@@ -8,27 +8,24 @@
 
 import UIKit
 
-protocol ViewControllerDelegate {
-    func didDismissAlert(sender: UIViewController, alert: UIAlertController)
-}
-
-class ViewController: UIViewController, QueueDelegate {
+class ViewController: UIViewController {
     
-    private var queue: Queue?
+    private var queue: NSOperationQueue?
     private var count = 1
     private var alertVisible: Bool = false
-    var delegate: ViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        delegate = queue
-        queue = Queue(delegate: self)
+        queue = NSOperationQueue()
     }
     
     @IBAction private func buttonTapped(sender: AnyObject) {
         let alert = Alert(title: "Alert \(count)", message: "message", buttons: ["OK", "Cool"])
         count++
-        queue?.addToQueue(alert)
+        
+        let counter = Counter()
+//        let operation = NSBlockOperation(block: counter.countDown(3, completion: nil))
+        // TODO: add to queue
     }
     
     func isAlertVisible() -> Bool {
@@ -40,13 +37,12 @@ class ViewController: UIViewController, QueueDelegate {
         if let buttons = alert.buttons {
             for (index, title) in buttons.enumerate() {
                 alertCon.addAction(UIAlertAction(title: title, style: index == 0 ? .Cancel : .Default, handler: { _ in
-                    self.delegate?.didDismissAlert(self, alert: alertCon)
                     self.alertVisible = false
+                    // TODO: remove from queue
                 }))
             }
         } else {
             alertCon.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { _ in
-                self.delegate?.didDismissAlert(self, alert: alertCon)
                 self.alertVisible = false
             }))
         }
