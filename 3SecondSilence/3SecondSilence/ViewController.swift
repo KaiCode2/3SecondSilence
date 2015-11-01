@@ -10,33 +10,32 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private var countinQueue: NSOperationQueue {
-        return NSOperationQueue()
-    }
-    private var presentationQueue: NSOperationQueue {
-        let queue = NSOperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        return queue
-    }
+    private var queue = NSOperationQueue()
+    private var last: NSOperation?
     private var count = 1
     
     @IBAction private func buttonTapped(sender: AnyObject) {
         let alert = Alert(title: "Alert \(count)", message: "message", buttons: ["OK", "Cool"])
         count++
         
-        let operation = CountingOperation(time: alert.time)
+        let countdownOperation = CountingOperation(time: alert.time)
         
-        operation.completionBlock = {
-            print("Completed")
-            let presentationOperation = PresentationOperation(viewController: self, alert: alert)
-            
-            print(self.presentationQueue.operations)
-            if let previous = self.presentationQueue.operations.last {
-                presentationOperation.addDependency(previous)
-            }
-            
-            self.presentationQueue.addOperation(presentationOperation)
+        countdownOperation.completionBlock = {
+            print("Countdown done")
         }
-        countinQueue.addOperation(operation)
+        
+        let presentationOperation = PresentationOperation(viewController: self, alert: alert)
+        presentationOperation.addDependency(countdownOperation)
+        
+        if let previous = last {
+            presentationOperation.addDependency(previous)
+        }
+        
+        queue.addOperation(countdownOperation)
+        queue.addOperation(presentationOperation)
+        
+        last = presentationOperation
+        print(last)
+        print(queue.operations)
     }
 }

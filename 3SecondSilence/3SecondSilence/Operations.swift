@@ -35,7 +35,7 @@ class PresentationOperation: NSOperation {
         }
         
         showAlert(alert, buttonAction: { _ in
-            self.finished = true
+            self._finished = true
         })
     }
     
@@ -74,6 +74,7 @@ class CountingOperation: NSOperation {
             _finished = newValue
         }
     }
+    
     init(time: NSTimeInterval) {
         self.time = time
         super.init()
@@ -83,10 +84,25 @@ class CountingOperation: NSOperation {
         if cancelled {
             return
         }
+        
         let counter = Counter()
         counter.countDown(time, completion: {
-            self.finished = true
-            self.completionBlock?()
+            if self.cancelled {
+                return
+            }
+            self._finished = true
         })
+    }
+    
+    
+}
+
+private struct Counter {
+    func countDown(time: NSTimeInterval, completion: (() -> Void)?) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { _ in
+            if let comp = completion {
+                comp()
+            }
+        }
     }
 }
